@@ -51,7 +51,7 @@ function intialValues() {
 
     function validationSchema() {
         return {
-            email: Yup.string().email("Formato de email incorrecto").required(true),
+            email: Yup.string().email(" Formato de email incorrecto ").required(true),
             password: Yup.string().required(true),
         };
     }
