@@ -3,6 +3,7 @@ import './LoginForm.scss'
 import { Button, Form } from "semantic-ui-react"
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import { toast } from "react-toastify"
 
 import { loginApi } from '../../../api/user'
 
@@ -17,6 +18,7 @@ export function LoginForm() {
                 const { access } = response;
             } catch (error) {
                 console.log(error);
+                toast.error(error.message);
             }   
         },
     });
