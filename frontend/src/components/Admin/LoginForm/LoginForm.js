@@ -6,8 +6,10 @@ import * as Yup from "yup"
 import { toast } from "react-toastify"
 
 import { loginApi } from '../../../api/user'
+import { useAuth } from '../../../hooks/'
 
 export function LoginForm() {
+    const { login } = useAuth();
 
     const formik = useFormik({
         initialValues: intialValues(),
@@ -16,8 +18,8 @@ export function LoginForm() {
             try {
                 const response = await loginApi(formValue);
                 const { access } = response;
+                login(access);
             } catch (error) {
-                console.log(error);
                 toast.error(error.message);
             }   
         },
