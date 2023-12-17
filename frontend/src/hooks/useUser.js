@@ -1,5 +1,5 @@
 import { getMeApi, getUsersApi } from "../api/user";
-import{ useState, useEffect } from "react";
+import{ useState} from "react";
 
 export function useUser() {
     const [loading, setLoading] = useState(true);
