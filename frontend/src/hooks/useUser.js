@@ -3,7 +3,7 @@ import{ useState} from "react";
 
 export function useUser() {
     const [loading, setLoading] = useState(true);
-    const[error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [users, setUsers] = useState(null);
     const { auth } = useAuth();
     const getME = async (token) => {
@@ -26,7 +26,11 @@ export function useUser() {
         }
 
     return {
+        loading,
+        error,
+        users,
         getME,
+        getUsers,
     };
 }
 }
