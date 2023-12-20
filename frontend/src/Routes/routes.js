@@ -7,8 +7,8 @@ const routes = [
     ...routesAdmin,
     ...routesClient,
     {
-    layout: BasicLayout,
-    component: Error404,
+        layout: BasicLayout,
+        component: Error404,
     },
 ];
 

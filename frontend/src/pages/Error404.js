@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export function Error404() {
   return (
     <div>
-      <h2>Error 404</h2>
+      <h3>Error404</h3>
     </div>
-  )
+  );
 }
