@@ -1,29 +1,37 @@
-import React, { useEffect } from 'react'
-import { HeaderPage, TableUsers } from '../../components/Admin'
-import { useUser } from '../../hooks'
-import { Loader } from 'semantic-ui-react';
+import React, { useEffect, useState } from "react";
+import { HeaderPage, TableUsers } from "../../components/Admin";
+import { useUser } from "../../hooks";
+import { ModalBasic } from "../../components/Common/";
+import { Loader } from "semantic-ui-react";
 
 export function UserAdmin() {
-  const {loading, users, getUsers} = useUser();
+    const [showModal, setShowModal] = useState(false);
+    const [contentModal, setContentModal] = useState(null);
+    const [titleModel, setTitleModel] = useState(null);
 
-  console.log("Loading--->", loading);
-  console.log("Users--->", users);
+    const { loading, users, getUsers } = useUser();
+    useEffect(() => {
+        getUsers();
+    }, []);
 
+    const openCloseModal = () => setShowModal((prev) => !prev);
 
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  return (
-    <>
-      <HeaderPage title="usuarios" btnTitle="Nuevo usuario"/>
-      {loading ? (
-        <Loader active inline="centered">
-          Cargando...
-        </Loader>
-      ) : (
-        <TableUsers users={users} />
-      )}
-    </>
-  )
+    return (
+        <>
+            <HeaderPage title="usuarios" btnTitle="Nuevo usuario" btnClick={openCloseModal} />
+            {loading ? (
+                <Loader active inline="centered">
+                    Cargando...
+                </Loader>
+            ) : (
+                <TableUsers users={users} />
+            )}
+            <ModalBasic
+                show={showModal}
+                onClose={openCloseModal}
+                title="Crear usuario"
+                children={<h2>content...</h2>}
+            />
+        </>
+    );
 }
