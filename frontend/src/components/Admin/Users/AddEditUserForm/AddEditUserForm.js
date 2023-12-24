@@ -49,7 +49,7 @@ export function AddEditUserForm() {
                 </div>
 
                 <Button type="submit" className="btn-submit" primary fluid>
-                    Crear usuario
+                    Crear nuevo usuario
                 </Button>
             </Form>
         </div>
