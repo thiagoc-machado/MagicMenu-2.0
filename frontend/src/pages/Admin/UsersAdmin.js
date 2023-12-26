@@ -11,19 +11,49 @@ import { Loader } from "semantic-ui-react";
 export function UserAdmin() {
     const [showModal, setShowModal] = useState(false);
     const [contentModal, setContentModal] = useState(null);
-    const [titleModel, setTitleModel] = useState(null);
+    const [titleModel, setTitleModal] = useState(null);
+    const [refetch, setRefetch] = useState(false);
 
-    const { loading, users, getUsers } = useUser();
+    const { loading, users, getUsers, deleteUser } = useUser();
     useEffect(() => {
         getUsers();
-    }, []);
+    }, [refetch]);
 
     const openCloseModal = () => setShowModal((prev) => !prev);
+    const onRefetch = () => setRefetch((prev) => !prev);
 
     const addUser = () => {
-        setTitleModel("Crear nuevo usuario");
-        setContentModal(<AddEditUserForm/>);
+        setTitleModal("Crear nuevo usuario");
+        setContentModal(
+            <AddEditUserForm onClose={openCloseModal} onRefetch={onRefetch} />
+        );
         openCloseModal();
+    };
+
+    const updateUser = (data) => {
+        setTitleModal("Actualizar usuario");
+        setContentModal(
+            <AddEditUserForm
+                onClose={openCloseModal}
+                onRefetch={onRefetch}
+                user={data}
+            />
+        );
+        openCloseModal();
+    };
+
+    const onDeleteUser = async (data) => {
+        const result = window.confirm(`¿Eliminar usuario? ${data.email}`);
+
+        if (result) {
+          try{
+            await deleteUser(data.id);
+            onRefetch();
+          }
+          catch(error){
+            console.log(error);
+          }
+        }
     };
 
     return (
@@ -38,7 +68,7 @@ export function UserAdmin() {
                     Cargando...
                 </Loader>
             ) : (
-                <TableUsers users={users} />
+                <TableUsers users={users} updateUser={updateUser} onDeleteUser={onDeleteUser} />
             )}
             <ModalBasic
                 show={showModal}

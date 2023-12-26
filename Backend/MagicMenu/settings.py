@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=@f7u1z$ot^9hy6n(1a!8(f4l&v92tilyt#w@9tdz3fa_h)n_p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', "localhost", ]
+ALLOWED_HOSTS = ['127.0.0.1', "localhost", '127.0.0.1:8000', ]
 
 
 # Application definition
@@ -155,4 +155,12 @@ CORS_ALLOW_CREDENTIALS = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=120)
+}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    # bearer token
+    
+
+
 }

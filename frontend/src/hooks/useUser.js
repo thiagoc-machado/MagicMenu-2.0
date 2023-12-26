@@ -3,6 +3,8 @@ import {
     getMeApi,
     getUsersApi,
     addUserApi,
+    updateUserApi,
+    deleteUserApi,
 } from "../api/user";
 import { useAuth } from ".";
 
@@ -45,6 +47,31 @@ export function useUser() {
             return null;
         }
     };
+    const updateUser = async (id, data) => {
+        try {
+            setLoading(true);
+            const response = await updateUserApi(id, data, auth.token);
+            setLoading(false);
+            return response;
+        } catch (error) {
+            setLoading(false);
+            setError(error);
+            return null;
+        }
+    };
+
+    const deleteUser = async (id) => {
+        try {
+            setLoading(true);
+            const response = await deleteUserApi(id, auth.token);
+            setLoading(false);
+            return response;
+        } catch (error) {
+            setLoading(false);
+            setError(error);
+            return null;
+        }
+    };
 
     return {
         loading,
@@ -53,6 +80,8 @@ export function useUser() {
         getMe,
         getUsers,
         addUser,
+        updateUser,
+        deleteUser,
     };
 }
 

@@ -4,17 +4,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useUser } from "../../../../hooks";
 import "./AddEditUserForm.scss";
+import { update } from "lodash";
 
-export function AddEditUserForm() {
-    const { addUser } = useUser();
+export function AddEditUserForm(props) {
+    const { onClose, onRefetch, user } = props;
+    const { addUser, updateUser } = useUser();
     const formik = useFormik({
-        initialValues: initialValues(),
-        validationSchema: Yup.object(newSchema()),
+        initialValues: initialValues(user),
+        validationSchema: Yup.object(user ? updateSchema() : newSchema()),
         validateOnChange: false,
-        onSubmit: async(formValue) => {
+        onSubmit: async (formValue) => {
             try {
-                await addUser(formValue);
-                console.log("Usuario creado correctamente");
+                if (user) {
+                    await updateUser(user.id, formValue);
+                } else await addUser(formValue);
+
+                onRefetch();
+                onClose();
             } catch (error) {
                 console.log(error);
             }
@@ -64,7 +70,9 @@ export function AddEditUserForm() {
                     <Checkbox
                         toggle
                         checked={formik.values.is_active}
-                        onChange={(e, data) => formik.setFieldValue("is_active", data.checked)}
+                        onChange={(e, data) =>
+                            formik.setFieldValue("is_active", data.checked)
+                        }
                     />{" "}
                     Usuario activo
                 </div>
@@ -72,28 +80,34 @@ export function AddEditUserForm() {
                     <Checkbox
                         toggle
                         checked={formik.values.is_staff}
-                        onChange={(e, data) => formik.setFieldValue("is_staff", data.checked)}
+                        onChange={(e, data) =>
+                            formik.setFieldValue("is_staff", data.checked)
+                        }
                     />{" "}
                     Es miembro del staff
                 </div>
 
-                <Button type="submit" className="btn-submit" primary fluid>
-                    Crear nuevo usuario
-                </Button>
+                <Button
+                    type="submit"
+                    className="btn-submit"
+                    primary
+                    fluid
+                    content={user ? "Actualizar" : "Crear"}
+                ></Button>
             </Form>
         </div>
     );
 }
 
-function initialValues() {
+function initialValues(data) {
     return {
-        username: "",
-        email: "",
-        first_name: "",
-        last_name: "",
+        username: data?.username || "",
+        email: data?.email ||"",
+        first_name: data?.first_name || "",
+        last_name: data?.last_name || "",
         password: "",
-        is_active: true,
-        is_staff: false,
+        is_active: data?.is_active ? true : false,
+        is_staff: data?.is_staff ? true : false,
     };
 }
 
@@ -104,6 +118,18 @@ function newSchema() {
         first_name: Yup.string(),
         last_name: Yup.string(),
         password: Yup.string().required(true),
+        is_active: Yup.bool().required(true),
+        is_staff: Yup.bool().required(true),
+    };
+}
+
+function updateSchema() {
+    return {
+        username: Yup.string().required(true),
+        email: Yup.string().email(true).required(true),
+        first_name: Yup.string(),
+        last_name: Yup.string(),
+        password: Yup.string(),
         is_active: Yup.bool().required(true),
         is_staff: Yup.bool().required(true),
     };
