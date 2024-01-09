@@ -1,15 +1,24 @@
-import React, {useEffect} from "react";
-import { HeaderPage } from "../../components/Admin";
-import {useCategory} from "../../hooks";
-
+import React, { useEffect } from "react";
+import { Loader } from "semantic-ui-react";
+import { HeaderPage, TableCategoryAdmin } from "../../components/Admin";
+import { useCategory } from "../../hooks";
 
 export function CategoriesAdmin() {
-    const {categories, error, loading,getCategories} = useCategory();
+    const { categories, error, Loading, getCategories } = useCategory();
     console.log(categories);
-    useEffect(() => getCategories(), [])
+    useEffect(() => getCategories(), []);
     return (
         <div>
-            <HeaderPage title="Categories" btnTitle="Nueva categoria"/>
+            <HeaderPage title="Categories" btnTitle="Nueva categoria" />
+            {Loading ? (
+                <Loader active inline="centered">
+                    Cargando...
+                </Loader>
+            ) : (
+                <TableCategoryAdmin
+                    categories={categories}
+                />
+            )}
         </div>
     );
 }
