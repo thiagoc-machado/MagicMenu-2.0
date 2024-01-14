@@ -55,7 +55,7 @@ export function AddEditCategoryForm(props) {
                 {...getRootProps()}
                 color={formik.errors.image && "red"}
             >
-                Subir image
+                Subir menu image
             </Button>
             <input {...getInputProps()} />
             <Image src={previewImage} fluid />
