@@ -1,14 +1,16 @@
-import { userState } from "react";
-
-import { getCategoriesApi, addategoryApi } from "../api/categories";
 import { useState } from "react";
-import { useEffect } from "react";
-import { useAuth } from "./";
-import { set } from "lodash";
+import {
+    getCategoriesApi,
+    addCategoryApi,
+    updateCategoryApi,
+    deleteCategoryApi,
+} from "../api/categories";
 
-export const useCategory = () => {
+import { useAuth } from "./";
+
+export function useCategory() {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
     const [categories, setCategories] = useState(null);
     const { auth } = useAuth();
 
@@ -21,15 +23,35 @@ export const useCategory = () => {
         } catch (error) {
             setLoading(false);
             setError(error);
-        } finally {
-            setLoading(false);
         }
     };
 
     const addCategory = async (data) => {
         try {
             setLoading(true);
-            await addategoryApi(data, auth.token);
+            await addCategoryApi(data, auth.token);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            setError(error);
+        }
+    };
+
+    const updateCategory = async (id, data) => {
+        try {
+            setLoading(true);
+            await updateCategoryApi(id, data, auth.token);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            setError(error);
+        }
+    };
+
+    const deleteCategory = async (id) => {
+        try {
+            setLoading(true);
+            await deleteCategoryApi(id, auth.token);
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -43,5 +65,7 @@ export const useCategory = () => {
         categories,
         getCategories,
         addCategory,
+        updateCategory,
+        deleteCategory,
     };
-};
+}

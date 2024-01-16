@@ -1,48 +1,83 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import {
     HeaderPage,
     TableCategoryAdmin,
     AddEditCategoryForm,
 } from "../../components/Admin";
-import { useCategory } from "../../hooks";
 import { ModalBasic } from "../../components/Common";
-import { initial } from "lodash";
+import { useCategory } from "../../hooks";
 
 export function CategoriesAdmin() {
-    const [showModal, SetShowModal] = useState(false);
-    const [titleModal, SetTitleModal] = useState(null);
-    const [contentModal, setContentModal] = useState(null);
-    const { categories, error, Loading, getCategories } = useCategory();
+    const [showModal, setShowModal] = useState(false);
     const [refetch, setRefetch] = useState(false);
 
-    useEffect(() => getCategories(), [refetch]);
+    const [titleModal, setTitleModal] = useState(null);
+    const [contentModal, setContentModal] = useState(null);
 
-    const openCloseModal = () => SetShowModal((prev) => !prev);
+    const { loading, categories, getCategories, deleteCategory } =
+        useCategory();
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            await getCategories();
+        };
+        fetchCategories();
+    }, [refetch]);
+
+    const openCloseModal = () => setShowModal((prev) => !prev);
     const onRefetch = () => setRefetch((prev) => !prev);
 
     const addCategory = () => {
-        SetTitleModal("Nueva categoria");
+        setTitleModal("Nueva categoria");
         setContentModal(
-            <AddEditCategoryForm onClose={openCloseModal} onRefetch={onRefetch} />
+            <AddEditCategoryForm
+                onClose={openCloseModal}
+                onRefetch={onRefetch}
+            />
         );
         openCloseModal();
+    };
+
+    const updateCategory = (data) => {
+        setTitleModal("Actualizar categoria");
+        setContentModal(
+            <AddEditCategoryForm
+                onClose={openCloseModal}
+                onRefetch={onRefetch}
+                category={data}
+            />
+        );
+        openCloseModal();
+    };
+
+    const onDeleteCategory = async (data) => {
+        const result = window.confirm(`¿Eliminar categoría ${data.title}?`);
+        if (result) {
+            await deleteCategory(data.id);
+            onRefetch();
+        }
     };
 
     return (
         <>
             <HeaderPage
-                title="Categories"
+                title="Categorias"
                 btnTitle="Nueva categoria"
                 btnClick={addCategory}
             />
-            {Loading ? (
+            {loading ? (
                 <Loader active inline="centered">
                     Cargando...
                 </Loader>
             ) : (
-                <TableCategoryAdmin categories={categories} />
+                <TableCategoryAdmin
+                    categories={categories}
+                    updateCategory={updateCategory}
+                    deleteCategory={onDeleteCategory}
+                />
             )}
+
             <ModalBasic
                 show={showModal}
                 onClose={openCloseModal}
