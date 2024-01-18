@@ -1,0 +1,1 @@
+export { TableProductAdmin } from "./TableProductAdmin";
