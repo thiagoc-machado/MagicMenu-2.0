@@ -21,6 +21,7 @@ export function AddEditProductForm(props) {
         setCategoriesFormat(formatDropdownData(categories));
     }, [categories]);
 
+
     const formik = useFormik({
         initialValues: initialValues(product),
         validationSchema: Yup.object(product ? updateSchema() : newSchema()),

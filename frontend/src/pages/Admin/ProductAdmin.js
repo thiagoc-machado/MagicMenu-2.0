@@ -14,8 +14,19 @@ export function ProductAdmin() {
     const [contentModal, setContentModal] = useState(null);
     const [refetch, setRefetch] = useState(false);
     const { loading, products, getProducts, deleteProduct } = useProduct();
+    console.log(products);
 
-    useEffect(() => getProducts(), [refetch]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getProducts();
+            } catch (error) {
+                throw error;
+            }
+        };
+
+        fetchData();
+    }, [refetch]);
 
     const openCloseModal = () => setShowModal((prev) => !prev);
     const onRefetch = () => setRefetch((prev) => !prev);
@@ -44,7 +55,7 @@ export function ProductAdmin() {
     };
 
     const onDeleteProduct = async (data) => {
-        const result = window.confirm(`¿Eliminar producto ${data.title}?`);
+        const result = window.confirm(`Eliminar producto ${data.title}?`);
         if (result) {
             await deleteProduct(data.id);
             onRefetch();

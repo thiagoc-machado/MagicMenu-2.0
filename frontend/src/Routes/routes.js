@@ -7,9 +7,11 @@ const routes = [
     ...routesAdmin,
     ...routesClient,
     {
+        path: "*",
         layout: BasicLayout,
         component: Error404,
-    },
+    }
+    
 ];
 
 export default routes;

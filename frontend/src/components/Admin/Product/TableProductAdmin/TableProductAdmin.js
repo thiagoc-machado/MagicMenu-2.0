@@ -27,7 +27,12 @@ export function TableProductAdmin(props) {
                         </Table.Cell>
                         <Table.Cell>{product.title}</Table.Cell>
                         <Table.Cell>{product.price} €</Table.Cell>
-                        <Table.Cell>{product.category_data.title}</Table.Cell>
+                        <Table.Cell>
+                            {product.category_data
+                                ? product.category_data.title
+                                : ""}
+                        </Table.Cell>
+
                         <Table.Cell className="status">
                             {product.active ? (
                                 <Icon name="check" />
@@ -56,6 +61,7 @@ function Actions(props) {
             <Button icon onClick={() => updateProduct(product)}>
                 <Icon name="pencil" />
             </Button>
+
             <Button icon negative onClick={() => deleteProduct(product)}>
                 <Icon name="close" />
             </Button>
