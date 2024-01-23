@@ -32,7 +32,7 @@ export function ProductAdmin() {
     const onRefetch = () => setRefetch((prev) => !prev);
 
     const addProduct = () => {
-        setTitleModal("Crear nuevo producto");
+        setTitleModal("Nuevo producto");
         setContentModal(
             <AddEditProductForm
                 onClose={openCloseModal}
