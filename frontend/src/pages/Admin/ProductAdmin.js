@@ -66,7 +66,7 @@ export function ProductAdmin() {
         <>
             <HeaderPage
                 title="Productos"
-                btnTitle="Nuevo producto"
+                btnTitle="Crear un Nuevo producto"
                 btnClick={addProduct}
             />
 
